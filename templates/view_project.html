@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+{% load staticfiles %}
+
+{% block main_content %}
+<h3>{{project.project_name}}<p /></h3>
+{{project.link}}<p />
+Owner: {{project.owner}} <p />
+{{project.details}}<p />
+
+<hr>
+<h3>Issues</h3>
+{% for i in issues %}
+<a href={% url "dumbo:view_issue" i.id %}>
+  #{{i.id}} : {{i.title}} <br>
+</a>
+{{i.timestamp}} by {{i.author}} <br>
+{{i.attachment}} <br/>
+{{i.content}} <br>
+Assigned to: {{i.assignee}}
+<p /> <hr>
+{% endfor %}
+
+{% endblock %}

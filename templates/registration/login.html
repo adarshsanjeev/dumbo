@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+{% load staticfiles %}
+
+{% block page_title %} Login {% endblock %}
+{% block page_heading %} Login to Dumbo {% endblock %}
+{% block right_bar %}{% endblock %}
+{% block main_content %}
+<h3>Login in to your account!</h3>
+{% if form_errors %}
+<div style="color:red">
+{{form_errors}}
+</div>
+{% endif %}
+<form action="." method="POST" style="width:35%;">
+  {% csrf_token %}
+  Username: <input type="text" name="username">
+  Password: <input type="password" name="password">
+  <input type="submit" value="Login">
+</form>
+{% endblock %}
+

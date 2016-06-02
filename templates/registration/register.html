@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+{% load staticfiles %}
+
+{% block page_title %} Register {% endblock %}
+{% block page_heading %} Registeration for Dumbo {% endblock %}
+{% block right_bar %}{% endblock %}
+{% block main_content %}
+{% if user.errors %}
+<div style="color:red">
+{{user.errors}}
+</div>
+{% endif %}
+{% if profile.errors %}
+ASA
+<div style="color:red">
+  {{profile.errors}}
+</div>
+{% endif %}
+
+<div style="width:50%">
+<form action="." method="POST">
+  {% csrf_token %}
+  {{user.as_p}}
+  {{profile.as_p}}
+  <input type="submit" value="Register">
+</form>
+</div>
+{% endblock %}
+

@@ -1,0 +1,15 @@
+{% extends 'layout.html' %}
+{% load staticfiles %}
+
+{% block main_content %}
+<h3>{{issue}}<p /></h3>
+Edit | Resolve
+{{issue.timestamp}} by {{issue.author}} <br>
+{% if issue.attachment %}
+{{issue.attachment.url}} <br/>
+{% endif %}
+{{issue.content}} <br>
+Assigned to: {{issue.assignee}}
+<p /> <hr>
+
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+{% load staticfiles %}
+
+{% block page_title %} Dumbo {% endblock %}
+{% block page_heading %} Dumbo <p> The Simple Issue Tracker {% endblock %}
+
+{% block right_bar %}
+<h4>Discover new projects!</h4>
+{% endblock %}
+
+{% block main_content %}
+{% if user.is_authenticated %}
+<h2>Your notifications</h2>
+{% else %}
+Dicvoer Dumbo Today!<p>
+Lots of features
+{% endif %}
+{% endblock %}
