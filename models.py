@@ -19,17 +19,21 @@ class Project(models.Model):
     link = models.URLField(blank = True)
     details = models.TextField("About your project")
     owner = models.ForeignKey(User, on_delete = models.CASCADE)
-    
+    group = models.ForeignKey(Group, on_delete = models.CASCADE)
+
     def __unicode__(self):
         return "%s : %s" %(self.name, self.details)
 
     def save(self, *args, **kwargs):
-        ps = slugify(self.name)
-        self.slug = ps
-        counter = 1
-        while Project.objects.filter(slug=self.slug).exists():
-            self.slug = ps+str(counter)
-            counter += 1
+        if self.slug == self.owner.username:
+            ps = slugify(self.name)
+            self.slug = ps
+            counter = 1
+            while Project.objects.filter(slug=self.slug).exists():
+                self.slug = ps+str(counter)
+                counter += 1
+            self.group, c = Group.objects.get_or_create(name=self.slug)
+            self.group.user_set.add(self.owner)
         super(Project, self).save(*args, **kwargs)
 
 class ProjectForm(ModelForm):

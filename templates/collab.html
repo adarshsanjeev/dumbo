@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+{% block main_content %}
+<h3>Collaborators for {{project.name}}</h3>
+<h4>Add User</h4>
+<form action="" method="POST">
+  {% csrf_token %}
+  <label for="user">
+	Username:
+  </label>
+  <input name="username" type="text" style="width:200px">
+  <input type="submit" value="Add" />
+</form>
+
+<h4>Current Collabs</h4>
+<ul>
+  {% for c in collab_list %}
+  <li>{{c.username}}
+	{% if user != c %}<a href="">Remove</a></li>{% endif %}
+  {% empty %}
+  You have no collaborators. Add some!
+  {% endfor %}
+</ul>
+{% endblock %}

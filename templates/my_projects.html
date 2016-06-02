@@ -2,15 +2,20 @@
 {% block main_content %}
 <title>Hello</title>
 {% if not projects %}
-<h2>You have no projects currently</h2>
+
 {% endif %}
 {% for project in projects %}
-<h3>{{project.project_name}}</h3>
+<h3>{{project.name}}</h3>
+<div><a href={% url "dumbo:manage_collab" project.slug %}>
+  Manage collabarators
+</a></div>
 <a href={% url "dumbo:edit_project" project.slug %}>Edit</a> |
 <a href={% url "dumbo:view_project" project.slug %}>View</a> |
 <a href={% url "dumbo:delete_project" project.slug %}>Delete</a> <p />
 About:
 {{project.details}}
 <hr />
+{% empty %}
+<h2>You have no projects currently</h2>
 {% endfor %}
 {% endblock %}

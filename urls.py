@@ -10,7 +10,8 @@ urlpatterns = [
     url(r'^accounts/register/$', views.register, name='register'),
     url(r'^accounts/logout/$', auth_views.logout, name='logout'),
 
-#     url(r'^user/my_projects/$', views.my_projects, name="my_projects"),
+    url(r'^user/my_projects/$', views.my_projects, name="my_projects"),
+    url(r'^project/collab/(?P<slug>[\w-]*)/$', views.manage_collab, name="manage_collab"),
 #     url(r'^user/profile/$', views.profile, name="profile"),
 # 
     url(r'^project/create/$', views.create_project, name="create_project"),
