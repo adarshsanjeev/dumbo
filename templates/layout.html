@@ -20,8 +20,8 @@
 	  <div class="top-bar-right">
 		<ul class="menu">
 		  {% if user.is_authenticated %}
-		  {% comment %}
 		  <li><a href={% url "dumbo:create_project" %}>Create a Project</a></li>
+		  {% comment %}
 		  <li><a href={% url "dumbo:create_issue" %}>Create an Issue</a></li>
 		  <li><a href={% url "dumbo:my_projects" %}>My Projects</a></li>
 		  <li><a href={% url "dumbo:profile" %}>Profile</a></li>

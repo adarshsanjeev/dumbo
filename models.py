@@ -13,6 +13,31 @@ class Profile(models.Model):
     about = models.TextField("About yourself", blank = True)
     private = models.BooleanField("Keep my Profile private", default = False)
 
+class Project(models.Model):
+    name = models.CharField("Project Name", max_length = 20)
+    slug = models.SlugField(blank = True, unique = True)
+    link = models.URLField(blank = True)
+    details = models.TextField("About your project")
+    owner = models.ForeignKey(User, on_delete = models.CASCADE)
+    
+    def __unicode__(self):
+        return "%s : %s" %(self.name, self.details)
+
+    def save(self, *args, **kwargs):
+        ps = slugify(self.name)
+        self.slug = ps
+        counter = 1
+        while Project.objects.filter(slug=self.slug).exists():
+            self.slug = ps+str(counter)
+            counter += 1
+        super(Project, self).save(*args, **kwargs)
+
+class ProjectForm(ModelForm):
+    slug = forms.SlugField(widget=forms.HiddenInput())
+    class Meta:
+        model = Project
+        exclude = []
+
 class UserForm(ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
     class Meta:
