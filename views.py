@@ -1,4 +1,3 @@
-
 from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.forms.widgets import HiddenInput
@@ -6,7 +5,7 @@ from django.contrib.auth.models import User, Group, Permission
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .models import UserForm, ProfileForm, Profile, Project, ProjectForm
+from .models import UserForm, ProfileForm, Profile, Project, ProjectForm, Issue, IssueForm
 from datetime import datetime
 
 def index(request):
@@ -47,8 +46,8 @@ def create_project(request):
 
 def view_project(request, slug):
     project = get_object_or_404(Project, slug=slug)
-    # issues = Issue.objects.filter(project=project)
-    return render(request, "view_project.html", {'project':project})
+    issues = Issue.objects.filter(project=project)
+    return render(request, "view_project.html", {'project':project, 'issues':issues})
 
 @login_required
 def edit_project(request, slug):
@@ -84,3 +83,21 @@ def manage_collab(request, slug):
         project.group.user_set.add(user)
     collab_list = project.group.user_set.all()
     return render(request, "collab.html", {"project":project, "collab_list":collab_list})
+
+@login_required
+def create_issue(request, slug):
+    project = get_object_or_404(Project, slug=slug, owner=request.user)
+    #if request.user not in project.group.user_set.all():
+    #    return Http404("You don't have permission")
+    if request.method == "POST":
+        form = IssueForm(request.POST, request.FILES)
+        if form.is_valid():
+            issue = form.save(commit=False)
+            issue.user = request.user
+            issue.tag = "UNCONFIRMED"
+            issue.project = project
+            issue.save()
+            return HttpResponseRedirect("/project/view/%s" %(project.slug))
+    else:
+        form = IssueForm(initial={'tag':'UNCONFIRMED', 'author':request.user, 'project':project})
+    return render(request, "form_template.html", {"form":form})

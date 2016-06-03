@@ -9,9 +9,25 @@
 {% else %}
 Owner: {{project.owner}} <p />
 {% endif %}
+<a href={% url 'dumbo:create_issue' project.slug %}><h6>Create an Issue</h6></a>
 <p />
 <a href={{project.link}}>Project Website</a><p />
 {{project.details}}<p />
-
+<br />
 <hr>
+<h3>Issues</h3>
+{% for i in issues %}
+{{ i.title }} : {{i.content}}<br />
+Status:{{i.tag}} Created on:{{i.timestamp}} <br />
+
+{% if i.attachment %}
+{{i.attachment.url}}
+{% else %}
+No attachment
+{% endif %}
+
+{% empty %}
+No issues
+{% endfor %}
+
 {% endblock %}

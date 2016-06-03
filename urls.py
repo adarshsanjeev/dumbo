@@ -18,7 +18,7 @@ urlpatterns = [
     url(r'^project/edit/(?P<slug>[\w-]*)/$', views.edit_project, name="edit_project"),
     url(r'^project/view/(?P<slug>[\w-]*)/$', views.view_project, name="view_project"),
     url(r'^project/delete/(?P<slug>[\w-]*)/$', views.delete_project, name="delete_project"),
-# 
-#     url(r'^issue/create/$', views.create_issue, name="create_issue"),
+
+    url(r'^issue/create/(?P<slug>[\w-]*)/$', views.create_issue, name="create_issue"),
 #     url(r'^issue/view/(?P<issue_id>[0-9]*)/$', views.view_issue, name="view_issue"),
 ]
