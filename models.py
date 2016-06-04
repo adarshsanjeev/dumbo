@@ -52,14 +52,18 @@ class Issue(models.Model):
     title = models.CharField("Title", max_length = 20)
     project = models.ForeignKey(Project, on_delete = models.CASCADE)
     content = models.TextField("Whats the issue?")
-    attachment = models.FileField(upload_to = "attachment/", blank = True)
     tag = models.CharField("Add a tag to the issue", max_length=11, choices=ISSUE_STATUS, default=UNCONFIRMED)
     author = models.ForeignKey(User, on_delete = models.SET_DEFAULT, default = None, related_name='author')
     timestamp = models.DateTimeField(default = timezone.now)
+    last_updated = models.DateTimeField(default = timezone.now)
     assignee = models.ForeignKey(User, on_delete = models.SET_DEFAULT, default = None, blank = True, related_name='assignee', null = True)
 
     def __unicode__(self):
         return "%s : %s" %(self.id, self.title)  
+
+class Attachment(models.Model):
+    attachment = models.FileField(upload_to = "attachment/", blank = True)
+    issue = models.ForeignKey(Issue, on_delete = models.CASCADE)
 
 class ProjectForm(ModelForm):
     slug = forms.SlugField(widget=forms.HiddenInput())
@@ -79,6 +83,7 @@ class ProfileForm(ModelForm):
         fields = ['profile_pic', 'about', 'private']
 
 class IssueForm(ModelForm):
+    attachment = forms.FileField()
 
     class Meta:
         model = Issue
@@ -88,4 +93,5 @@ class IssueForm(ModelForm):
             'project':forms.HiddenInput(),
             'author':forms.HiddenInput(),
             'timestamp':forms.HiddenInput(),
+            'last_updated':forms.HiddenInput(),
         }

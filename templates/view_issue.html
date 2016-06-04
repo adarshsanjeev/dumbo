@@ -2,14 +2,35 @@
 {% load staticfiles %}
 
 {% block main_content %}
-<h3>{{issue}}<p /></h3>
-Edit | Resolve
-{{issue.timestamp}} by {{issue.author}} <br>
-{% if issue.attachment %}
-{{issue.attachment.url}} <br/>
+<h3>#{{issue.id}} {{issue.title}}<p /></h3>
+{% if user in issue.project.group.user_set.all %}
+<p><a href={% url "dumbo:edit_issue" issue.id %}>Edit Issue</a></p>
 {% endif %}
-{{issue.content}} <br>
+{{issue.tag}}<br />
+{{issue.timestamp}} by {{issue.author}} <br>
+Last updated at: {{issue.last_updated}}
+<br>
 Assigned to: {{issue.assignee}}
+
+<p>{{issue.content}}</p>
+
 <p /> <hr>
 
+  {% if attachments %}
+  {% for a in attachments %}
+<div style="background:silver">
+  <a href='{{a.attachment.url}}'>{{a.attachment.name}}</a>
+  {% if not forloop.last %}
+  <br />
+  {% endif %}
+</div>
+  {% endfor %}
+  {% endif %}
+<hr>
+<h4>Add an attachment</h4>
+<form action="" method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  <input type="file" name="attachment" />
+  <input type="submit" value="Submit" />
+</form>
 {% endblock %}

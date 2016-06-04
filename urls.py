@@ -20,5 +20,6 @@ urlpatterns = [
     url(r'^project/delete/(?P<slug>[\w-]*)/$', views.delete_project, name="delete_project"),
 
     url(r'^issue/create/(?P<slug>[\w-]*)/$', views.create_issue, name="create_issue"),
-#     url(r'^issue/view/(?P<issue_id>[0-9]*)/$', views.view_issue, name="view_issue"),
+    url(r'^issue/view/(?P<issue_id>[0-9]*)/$', views.view_issue, name="view_issue"),
+    url(r'^issue/edit/(?P<issue_id>[0-9]*)/$', views.edit_issue, name="edit_issue"),
 ]

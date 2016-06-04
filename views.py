@@ -5,7 +5,7 @@ from django.contrib.auth.models import User, Group, Permission
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .models import UserForm, ProfileForm, Profile, Project, ProjectForm, Issue, IssueForm
+from .models import UserForm, ProfileForm, Profile, Project, ProjectForm, Issue, IssueForm, Attachment
 from datetime import datetime
 
 def index(request):
@@ -97,7 +97,38 @@ def create_issue(request, slug):
             issue.tag = "UNCONFIRMED"
             issue.project = project
             issue.save()
+            if request.FILES:
+                attachment = Attachment(attachment=request.FILES['attachment'], issue = issue)
+                attachment.save()
             return HttpResponseRedirect("/project/view/%s" %(project.slug))
     else:
         form = IssueForm(initial={'tag':'UNCONFIRMED', 'author':request.user, 'project':project})
     return render(request, "form_template.html", {"form":form})
+
+def view_issue(request, issue_id):
+    issue = get_object_or_404(Issue, id=issue_id)
+    if request.method =="POST":
+        attachment = Attachment(attachment=request.FILES['attachment'], issue = issue)
+        attachment.save()
+    attachments = Attachment.objects.filter(issue=issue)
+    return render(request, "view_issue.html", {"issue":issue, "attachments":attachments})
+
+@login_required
+def edit_issue(request, issue_id):
+    issue = get_object_or_404(Issue, id=issue_id)
+    project = issue.project
+    if request.user not in project.group.user_set.all():
+        return Http404("You don't have permission")
+    if request.method == "POST":
+        form = IssueForm(request.POST, request.FILES)
+        if form.is_valid():
+            issue = form.save(commit=False)
+            issue.user = request.user
+            issue.tag = "UNCONFIRMED"
+            issue.project = project
+            issue.save()
+            return HttpResponseRedirect("/project/view/%s" %(project.slug))
+    else:
+        form = IssueForm(instance=issue, initial={'tag':'UNCONFIRMED', 'author':request.user, 'project':project})
+    form.fields['attachment'].widget = HiddenInput()
+    return render(request, "form_template.html", {'issue':issue, 'project':project, 'form':form})

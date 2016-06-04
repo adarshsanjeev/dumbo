@@ -17,15 +17,14 @@ Owner: {{project.owner}} <p />
 <hr>
 <h3>Issues</h3>
 {% for i in issues %}
-{{ i.title }} : {{i.content}}<br />
-Status:{{i.tag}} Created on:{{i.timestamp}} <br />
+<div style="background:silver">
 
-{% if i.attachment %}
-{{i.attachment.url}}
-{% else %}
-No attachment
-{% endif %}
+  <a href={% url "dumbo:view_issue" i.id %}> {{ i.title }} : {{i.content}}<br /></a>
+  Status:{{i.tag}}<br>
+  Created on:{{i.timestamp}} Last Updated:{{i.last_updated}}<br />
 
+</div>
+<br>
 {% empty %}
 No issues
 {% endfor %}

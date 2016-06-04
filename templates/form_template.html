@@ -2,7 +2,7 @@
 {% block main_content %}
 
 {{form.errors}}
-<form action="." method="POST" style="width:70%; padding-bottom:10%;">
+<form action="." method="POST" style="width:70%; padding-bottom:10%;" enctype="multipart/form-data">
   {% csrf_token %}
   {{form.as_p}}
   <input type="submit" value="Submit" />
