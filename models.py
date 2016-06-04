@@ -32,6 +32,7 @@ class Project(models.Model):
     details = models.TextField("About your project")
     owner = models.ForeignKey(User, on_delete = models.CASCADE)
     group = models.ForeignKey(Group, on_delete = models.CASCADE)
+    private = models.BooleanField("Is this a private project?", default=False)
 
     def __unicode__(self):
         return "%s : %s" %(self.name, self.details)
@@ -64,6 +65,8 @@ class Issue(models.Model):
 class Attachment(models.Model):
     attachment = models.FileField(upload_to = "attachment/", blank = True)
     issue = models.ForeignKey(Issue, on_delete = models.CASCADE)
+    user = models.ForeignKey(User)
+    timestamp = models.DateTimeField(default = timezone.now)
 
 class ProjectForm(ModelForm):
     slug = forms.SlugField(widget=forms.HiddenInput())
@@ -89,7 +92,6 @@ class IssueForm(ModelForm):
         model = Issue
         exclude = []
         widgets = {
-            'tag':forms.HiddenInput(),
             'project':forms.HiddenInput(),
             'author':forms.HiddenInput(),
             'timestamp':forms.HiddenInput(),

@@ -46,12 +46,16 @@ def create_project(request):
 
 def view_project(request, slug):
     project = get_object_or_404(Project, slug=slug)
+    if project.private is True and request.user not in project.group.user_set.all():
+        return Http404("Page not Found")
     issues = Issue.objects.filter(project=project)
     return render(request, "view_project.html", {'project':project, 'issues':issues})
 
 @login_required
 def edit_project(request, slug):
     project = get_object_or_404(Project, slug=slug)
+    if project.private is True and request.user not in project.group.user_set.all():
+        return Http404("Page not Found")
     if request.method == "POST":
         form = ProjectForm(request.POST, instance = project)
         form.fields['owner'].widget = HiddenInput()
@@ -98,7 +102,7 @@ def create_issue(request, slug):
             issue.project = project
             issue.save()
             if request.FILES:
-                attachment = Attachment(attachment=request.FILES['attachment'], issue = issue)
+                attachment = Attachment(attachment=request.FILES['attachment'], issue = issue, user=request.user)
                 attachment.save()
             return HttpResponseRedirect("/project/view/%s" %(project.slug))
     else:
@@ -108,7 +112,7 @@ def create_issue(request, slug):
 def view_issue(request, issue_id):
     issue = get_object_or_404(Issue, id=issue_id)
     if request.method =="POST":
-        attachment = Attachment(attachment=request.FILES['attachment'], issue = issue)
+        attachment = Attachment(attachment=request.FILES['attachment'], issue = issue, user=request.user)
         attachment.save()
     attachments = Attachment.objects.filter(issue=issue)
     return render(request, "view_issue.html", {"issue":issue, "attachments":attachments})
@@ -117,18 +121,15 @@ def view_issue(request, issue_id):
 def edit_issue(request, issue_id):
     issue = get_object_or_404(Issue, id=issue_id)
     project = issue.project
-    if request.user not in project.group.user_set.all():
-        return Http404("You don't have permission")
     if request.method == "POST":
         form = IssueForm(request.POST, request.FILES)
         if form.is_valid():
             issue = form.save(commit=False)
             issue.user = request.user
-            issue.tag = "UNCONFIRMED"
             issue.project = project
             issue.save()
             return HttpResponseRedirect("/project/view/%s" %(project.slug))
     else:
-        form = IssueForm(instance=issue, initial={'tag':'UNCONFIRMED', 'author':request.user, 'project':project})
+        form = IssueForm(instance=issue)
     form.fields['attachment'].widget = HiddenInput()
     return render(request, "form_template.html", {'issue':issue, 'project':project, 'form':form})

@@ -19,7 +19,7 @@ Assigned to: {{issue.assignee}}
   {% if attachments %}
   {% for a in attachments %}
 <div style="background:silver">
-  <a href='{{a.attachment.url}}'>{{a.attachment.name}}</a>
+  <a href='{{a.attachment.url}}'>{{a.attachment.name}}</a> {{a.user}} {{a.timestamp}}
   {% if not forloop.last %}
   <br />
   {% endif %}
