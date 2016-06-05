@@ -21,7 +21,7 @@ ISSUE_STATUS = [
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete = models.CASCADE)
-    profile_pic = models.ImageField("Profile Picture", blank = True, upload_to = "profile_picture/")
+    profile_pic = models.ImageField("Profile Picture", blank = True, null = True, upload_to = "profile_picture/")
     about = models.TextField("About yourself", blank = True)
     private = models.BooleanField("Keep my Profile private", default = False)
 
@@ -68,6 +68,12 @@ class Attachment(models.Model):
     user = models.ForeignKey(User)
     timestamp = models.DateTimeField(default = timezone.now)
 
+class Comment(models.Model):
+    comment = models.TextField()
+    issue = models.ForeignKey(Issue)
+    author = models.ForeignKey(User)
+    timestamp = models.DateTimeField(default = timezone.now)
+
 class ProjectForm(ModelForm):
     slug = forms.SlugField(widget=forms.HiddenInput())
     class Meta:
@@ -97,3 +103,4 @@ class IssueForm(ModelForm):
             'timestamp':forms.HiddenInput(),
             'last_updated':forms.HiddenInput(),
         }
+

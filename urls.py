@@ -12,7 +12,8 @@ urlpatterns = [
 
     url(r'^user/my_projects/$', views.my_projects, name="my_projects"),
     url(r'^project/collab/(?P<slug>[\w-]*)/$', views.manage_collab, name="manage_collab"),
-#     url(r'^user/profile/$', views.profile, name="profile"),
+    url(r'^project/collab/remove/$', views.delete_collab, name="delete_collab"),
+    url(r'^user/profile/$', views.profile, name="profile"),
 
     url(r'^project/create/$', views.create_project, name="create_project"),
     url(r'^project/edit/(?P<slug>[\w-]*)/$', views.edit_project, name="edit_project"),
@@ -22,4 +23,6 @@ urlpatterns = [
     url(r'^issue/create/(?P<slug>[\w-]*)/$', views.create_issue, name="create_issue"),
     url(r'^issue/view/(?P<issue_id>[0-9]*)/$', views.view_issue, name="view_issue"),
     url(r'^issue/edit/(?P<issue_id>[0-9]*)/$', views.edit_issue, name="edit_issue"),
+    url(r'^issue/upload_file/(?P<issue_id>[0-9]*)/$', views.upload_file, name="upload_file"),
+    url(r'^issue/create_comment/(?P<issue_id>[0-9]*)/$', views.create_comment, name="create_comment"),
 ]

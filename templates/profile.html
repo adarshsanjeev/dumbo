@@ -3,10 +3,12 @@
 {% block main_content %}
 
 <h4>Profile</h4>
-{% if profile.private == True %}
-The user has seet his profile to private
+{% if profile.private == True and profile.user != user %}
+The user has set his profile to private
 {% else %}
+{% if profile.profile_pic %}
 {{ profile.profile_pic}}
+{% endif %}
 <h5>{{user}}</h5>
 Joined : {{user.date_joined}}
 <p />

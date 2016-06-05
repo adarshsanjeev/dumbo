@@ -2,17 +2,20 @@
 {% load staticfiles %}
 
 {% block page_title %} Dumbo {% endblock %}
-{% block page_heading %} Dumbo <p> The Simple Issue Tracker {% endblock %}
+{% block page_heading %} Dumbo <p /> The Simple Issue Tracker {% endblock %}
 
 {% block right_bar %}
 <h4>Discover new projects!</h4>
+{% for i in new_projects %}
+<a href={% url "dumbo:view_project" i.slug %}>{{i.name}}</a><br />
+{% endfor %}
 {% endblock %}
 
 {% block main_content %}
 {% if user.is_authenticated %}
 <h2>Your notifications</h2>
 {% else %}
-Dicvoer Dumbo Today!<p>
+Discover Dumbo Today!<p>
 Lots of features
 {% endif %}
 {% endblock %}
