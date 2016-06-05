@@ -16,7 +16,7 @@
   {% for c in collab_list %}
   <li>{{c.username}}
 	{% if user != c %}
-	<form method="POST" action={% url "dumbo:delete_collab" %} style="display:inline">
+	<form method="POST" action={% url "dumbo:delete_collab" %} styxle="display:inline">
 	  {% csrf_token %}
 	  <input type="hidden" value={{project.slug}} name="project" />
 	  <input type="hidden" value={{c.username}} name="username" />

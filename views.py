@@ -94,10 +94,9 @@ def delete_collab(request):
     if request.method == "POST":
         slug = request.POST.get("project")
         project = get_object_or_404(Project, slug=slug, owner=request.user)
-        collab = request.POST.get("username")
-        user = User.objects.get(username=username)
+        user = User.objects.get(username=request.POST.get("username"))
         project.group.user_set.remove(user)
-        return HttpResponseRedirect("project/collab/%s" %(project.slug))
+        return HttpResponseRedirect("/project/collab/%s" %(project.slug))
     return Http404("No")
 
 @login_required

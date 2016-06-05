@@ -11,8 +11,8 @@ urlpatterns = [
     url(r'^accounts/logout/$', auth_views.logout, {'next_page':'/'}, name='logout'),
 
     url(r'^user/my_projects/$', views.my_projects, name="my_projects"),
+    url(r'^collab/remove/$', views.delete_collab, name="delete_collab"),
     url(r'^project/collab/(?P<slug>[\w-]*)/$', views.manage_collab, name="manage_collab"),
-    url(r'^project/collab/remove/$', views.delete_collab, name="delete_collab"),
     url(r'^user/profile/$', views.profile, name="profile"),
 
     url(r'^project/create/$', views.create_project, name="create_project"),
