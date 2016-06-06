@@ -26,7 +26,7 @@ SECRET_KEY = '5$#i3og#06#3c^&01-(ae*jg(8d4g1o!n-&44+d(=%p&(4ma0-'
 DEBUG = False
 
 ALLOWED_HOSTS = ['*']
-
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
 # Application definition
 
@@ -123,9 +123,6 @@ LOGIN_REDIRECT_URL = '/'
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR,'static')
-STATIC_PATH = os.path.join(BASE_DIR,'static')
-STATICFILES_DIRS = (
-)
 
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 MEDIA_URL = '/media/'
